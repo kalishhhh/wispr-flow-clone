@@ -1,73 +1,170 @@
-# React + TypeScript + Vite
+🗣️ Wispr Flow Clone (Tauri + Deepgram)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A functional Wispr Flow–style voice-to-text desktop application, built using Tauri, React, and Deepgram for real-time speech transcription.
 
-Currently, two official plugins are available:
+This project focuses on implementing the core voice-to-text workflow with low latency, reliability, and native desktop performance, rather than pixel-perfect UI replication.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🎯 Project Goal
 
-## React Compiler
+The goal of this project is to demonstrate the ability to:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Capture microphone audio in real time
 
-## Expanding the ESLint configuration
+Stream audio efficiently to a speech-to-text service
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Receive and render live transcription results
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Build a performant, cross-platform desktop application using modern tooling
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+🧱 Tech Stack
+Desktop Framework
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Tauri (Rust backend + WebView frontend)
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Lightweight and secure alternative to Electron
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Frontend
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+React + TypeScript
+
+Vite for fast development
+
+Custom UI components (push-to-talk, chat-style transcript view)
+
+Audio Processing
+
+Web Audio API
+
+AudioWorkletNode for low-latency audio capture
+
+16kHz Linear PCM audio stream (Deepgram compatible)
+
+Speech-to-Text
+
+Deepgram Streaming API
+
+Real-time transcription via WebSocket
+
+Supports interim (partial) and final transcription results
+
+✅ Core Features Implemented
+1️⃣ Push-to-Talk Voice Input
+
+User-controlled start / stop recording
+
+Clear recording state feedback
+
+Safe lifecycle handling for repeated start/stop actions
+
+2️⃣ Microphone Access & Audio Capture
+
+Handles browser + OS microphone permissions
+
+High-quality mono audio capture
+
+Audio processed using AudioWorklet (modern & production-ready)
+
+3️⃣ Real-Time Transcription
+
+Audio streamed live to Deepgram over WebSocket
+
+Low-latency transcription results
+
+Supports interim (partial) transcription updates
+
+4️⃣ Transcript UI
+
+Live transcript rendered in real time
+
+Chat-style layout inspired by Wispr Flow
+
+Smooth auto-scrolling and message animations
+
+5️⃣ Error Handling & Stability
+
+Handles microphone permission failures
+
+Graceful handling of network / API errors
+
+Clean start/stop lifecycle to avoid broken sessions
+
+🧠 Architecture Overview
+Microphone
+   ↓
+AudioWorkletNode
+   ↓ (16kHz PCM)
+Frontend (React)
+   ↓
+Tauri invoke()
+   ↓
+Rust Backend
+   ↓
+Deepgram WebSocket API
+   ↓
+Live Transcription Events
+
+🔊 Why AudioWorklet?
+
+AudioWorklet provides:
+
+Lower latency than ScriptProcessorNode
+
+Better performance under load
+
+Long-term browser support (recommended modern API)
+
+This makes it suitable for production-grade real-time audio applications.
+
+🌐 Language Support
+
+Currently optimized for English
+
+Deepgram supports multilingual transcription
+
+Hindi / multilingual support can be enabled by adjusting the Deepgram language configuration in the backend
+
+⚠️ Known Limitations
+
+Background noise may occasionally trigger partial words
+(expected behavior in real-time speech-to-text systems)
+
+Automatic multilingual detection is not fully enabled yet
+
+UI is functional but not intended to be a pixel-perfect Wispr Flow replica
+
+🚀 Getting Started
+Prerequisites
+
+Node.js 18+
+
+Rust toolchain
+
+Tauri CLI
+
+Deepgram API Key
+
+Installation
+git clone https://github.com/kalishhhh/wispr-flow-clone.git
+cd wispr-flow-clone
+npm install
+
+Environment Setup
+
+Create a .env file inside src-tauri/:
+
+DEEPGRAM_API_KEY=your_api_key_here
+
+Run in Development
+npm run tauri dev
+
+📌 Notes for Reviewers
+
+Audio capture is implemented using AudioWorklet (src/audio/pcm-processor.js)
+
+Audio is streamed at 16kHz Linear PCM
+
+Designed with production reliability and clean lifecycle management in mind
+
+📄 License
+
+This project is intended for educational and evaluation purposes only and is not an official Wispr Flow product.
